@@ -60,21 +60,17 @@ def keyup(e):
             update_output()
     in_label.config(text=user_input, font=('Arial', 50))
 
-
+# Q-Lookup in tkinter
 root = tk.Tk()
 root.title("Q-Lookup by KI5WWP")
+#root.geometry("440x320")
 in_frame = tk.Frame(root, width = 300, height = 45)
-#out_frame = tk.Frame(root, width=300, height=300)
-in_label = tk.Label(in_frame, text = user_input, font=('Arial', 50), highlightbackground="blue", highlightthickness=3)
+in_label = tk.Label(in_frame, text = user_input, font=('Arial', 50)
+    , highlightbackground="blue", highlightthickness=3)
 out_label = tk.Label(in_frame, text = out_text)
 in_label.pack()
 out_label.pack()
-
-#frame.bind("<KeyPress>", keydown)
 in_frame.bind("<KeyRelease>", keyup)
-
 in_frame.pack()
-#out_frame.pack()
-
 in_frame.focus_set()
 root.mainloop()
