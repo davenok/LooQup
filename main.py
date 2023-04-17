@@ -2,7 +2,7 @@ import tkinter as tk
 from q_codes import qc
 
 user_input = "Q"
-instruction = "Q-Lookup\nA utility to help with those crazy Q Codes.\nby KI5WWP\n\n"
+instruction = "LooQup\nA utility to help with those crazy Q Codes.\nby KI5WWP\n\n"
 instruction += "Start typing the Q-code (the Q is already there)\n\n"
 instruction += "KEYS:\n<BACKSPACE> --- backspaces\n<ESC> --- Clears all input - start again"
 instruction += "\n<ALT>+<F4> --- Exit the program"
@@ -62,7 +62,7 @@ def keyup(e):
 
 # Q-Lookup in tkinter
 root = tk.Tk()
-root.title("Q-Lookup by KI5WWP")
+root.title("LooQup")
 #root.geometry("440x320")
 in_frame = tk.Frame(root, width = 300, height = 45)
 in_label = tk.Label(in_frame, text = user_input, font=('Arial', 50)
