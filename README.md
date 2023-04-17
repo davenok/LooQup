@@ -1,6 +1,6 @@
-# Q-Lookup
+# LooQup
 
-Q-Lookup is a utility for amateur radio operators (hams).
+LooQup is a utility for amateur radio operators (hams).
 The app allows quick lookup of those pesky 3 letter Q Codes used in radio communications.
 
 ## Installation
