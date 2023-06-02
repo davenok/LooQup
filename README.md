@@ -5,7 +5,7 @@ The app allows quick lookup of those pesky 3 letter Q Codes used in radio commun
 
 ## Installation
 
-Installation instructions - todo
+You can either clone this repository or manually download and unzip the file using the green Code button intop right corner.
 
 ## Usage
 
