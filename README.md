@@ -21,6 +21,20 @@ Please make sure to update tests as appropriate.
 
 ## License
 
-This is licensed under whatever license says you are free to use and modify this program, however any derivitave works must reference and give due credit to the original work and must be released under this same license.
+     LooQup - This program is for amateur radio users and allows lookup of Q codes
+     Copyright (C) 2023  ~ David Burklin
+
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 Author and contributors of this program are not responsible for any death, dismemberment, injury, insult, humiliation or other strange minutia that would result from using such an omnipotent and infalible program.
