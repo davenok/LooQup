@@ -6,6 +6,8 @@ The app allows quick lookup of those pesky 3 letter Q Codes used in radio commun
 ## Installation
 
 You can either clone this repository or manually download and unzip the file using the green Code button intop right corner.
+OR
+Download the index.html file. This is a self contained responsive HTML version using javascript and is one file does it all.
 
 ## Usage
 
