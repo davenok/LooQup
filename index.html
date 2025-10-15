@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LooQup - Q-Code Lookup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .input-section {
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .q-input {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2980b9;
+            background-color: white;
+            border: 3px solid #3498db;
+            border-radius: 5px;
+            padding: 10px 20px;
+            text-align: center;
+            min-width: 120px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .q-input:focus {
+            border-color: #2980b9;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .instructions {
+            background-color: #fff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+
+        .output {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+            white-space: pre-line;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .matches {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .definition {
+            color: #2c3e50;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-style: italic;
+        }
+
+        .key-hint {
+            background-color: #e8f4f8;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #5a6c7d;
+        }
+
+        .footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .q-input {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LooQup</h1>
+        <p class="subtitle">A utility to help with those crazy Q Codes</p>
+        <p class="subtitle">by KI5WWP</p>
+
+        <div class="input-section">
+            <input type="text" id="qInput" class="q-input" value="Q" readonly>
+            <div class="instructions">
+                <strong>Instructions:</strong><br>
+                Start typing the Q-code (the Q is already there)<br><br>
+                <strong>KEYS:</strong><br>
+                • <strong>BACKSPACE</strong> — backspaces<br>
+                • <strong>ESC</strong> — Clears all input - start again<br>
+                • <strong>Type letters A-Z</strong> — builds the Q-code
+            </div>
+        </div>
+
+        <div id="output" class="output">
+            <strong>LooQup</strong><br>
+            A utility to help with those crazy Q Codes.<br>
+            by KI5WWP<br><br>
+            Start typing the Q-code (the Q is already there)<br><br>
+            <strong>KEYS:</strong><br>
+            &lt;BACKSPACE&gt; --- backspaces<br>
+            &lt;ESC&gt; --- Clears all input - start again
+        </div>
+
+        <div class="key-hint">
+            Click in the input area above and start typing to search Q-codes
+        </div>
+
+        <div class="footer">
+            LooQup - Copyright (C) 2023 ~ David Burklin<br>
+            Licensed under GPL v3 - Amateur Radio Q-Code Lookup Utility
+        </div>
+    </div>
+
+    <script>
+        // Q-codes data from the Python app
+        const qCodes = [
+            {
+                'code': 'QRG',
+                'statement': "Your exact frequency (or that of ______) is _________kHz.\nAs a question - Will you tell me my exact frequency (or that of __________)?"
+            },
+            {
+                'code': "QRL",
+                'statement': "I am busy (or I am busy with _________).\nAs a question - Are you busy?\nUsually used to see if a frequency is busy."
+            },
+            {
+                'code': "QRM",
+                'statement': "Your transmission is being interfered with _________\n (1. Nil; 2. Slightly; 3. Moderately; 4. Severely; 5. Extremely.)\nAs a question - Is my transmission being interfered with?\nManmade interference"
+            },
+            {
+                'code': "QRN",
+                'statement': "I am troubled by static _________.\n(1. Nil; 2. Slightly; 3. Moderately; 4. Severely; 5. Extremely.)\nAs a question - Are you troubled by static?\nNatural interference"
+            },
+            {
+                'code': "QRO",
+                'statement': "Increase power.\nAs a question - Shall I increase power?"
+            },
+            {
+                'code': "QRP",
+                'statement': "Decrease power.\nAs a question - Shall I decrease power?\nIn practice, usually refers to operating a low power mode"
+            },
+            {
+                'code': "QRQ",
+                'statement': "Send faster (_________wpm).\nAs a question - Shall I send faster?"
+            },
+            {
+                'code': "QRS",
+                'statement': "Send more slowly (_________wpm).\nAs a question - Shall I send slower?"
+            },
+            {
+                'code': "QRT",
+                'statement': "Stop sending.\nAs a question - Shall I stop sending?"
+            },
+            {
+                'code': "QRU",
+                'statement': "I have nothing for you.\nAs a question - Have you anything for me?"
+            },
+            {
+                'code': "QRV",
+                'statement': "I am ready.\nAs a question - Are you ready?"
+            },
+            {
+                'code': "QRX",
+                'statement': "I will call you again at ______hours (on ______kHz).\nAs a question - When will you call me again?\n(Minutes are usually implied rather than hours.)"
+            },
+            {
+                'code': "QRZ",
+                'statement': "You are being called by _________ (on ______kHz).\nAs a question - Who is calling me?"
+            },
+            {
+                'code': "QSB",
+                'statement': "Your signals are fading.\nAs a question - Are my signals fading?"
+            },
+            {
+                'code': "QSK",
+                'statement': "I can hear you between signals; break in on my transmission.\nAs a question - Can you hear me between your signals and if\nso can I break in on your transmission?"
+            },
+            {
+                'code': "QSL",
+                'statement': "I am acknowledging receipt.\nAs a question - Can you acknowledge receipt (of a message or transmission)?"
+            },
+            {
+                'code': "QSO",
+                'statement': "I can communicate with _________ direct (or relay through ______).\nAs a question - Can you communicate with ______ direct or by relay?"
+            },
+            {
+                'code': "QSP",
+                'statement': "I will relay to ______.\nAs a question - Will you relay to ______?"
+            },
+            {
+                'code': "QST",
+                'statement': "General call preceding a message addressed to all amateurs\nand ARRL members. This is in effect CQ ARRL."
+            },
+            {
+                'code': "QSX",
+                'statement': "I am listening to ______ on ______kHz.\nAs a question - Will you listen to ______on ______kHz?"
+            },
+            {
+                'code': "QSY",
+                'statement': "Change to transmission on another frequency (or on ______kHz).\nAs a question - Shall I change to transmission on another frequency (or on ______kHz)?"
+            },
+            {
+                'code': "QTC",
+                'statement': "I have ______messages for you (or for ______).\nAs a question - How many messages have you to send?"
+            },
+            {
+                'code': "QTH",
+                'statement': "My location is _________.\nAs a question - What is your location?"
+            },
+            {
+                'code': "QTR",
+                'statement': "The time is _________.\nAs a question - What is the correct time?"
+            }
+        ];
+
+        let userInput = "Q";
+        const instruction = "LooQup\nA utility to help with those crazy Q Codes.\nby KI5WWP\n\nStart typing the Q-code (the Q is already there)\n\nKEYS:\n<BACKSPACE> --- backspaces\n<ESC> --- Clears all input - start again";
+        
+        const qInput = document.getElementById('qInput');
+        const output = document.getElementById('output');
+
+        function updateOutput() {
+            const length = userInput.length;
+            let matches = "";
+            let myMatch = "";
+            
+            if (length === 2) {
+                // Show all codes that start with the 2-letter input
+                const matchingCodes = [];
+                for (const qCode of qCodes) {
+                    if (qCode.code.substring(0, length) === userInput) {
+                        matchingCodes.push(qCode.code);
+                    }
+                }
+                
+                if (matchingCodes.length === 0) {
+                    output.innerHTML = '<span class="error">Sorry, no matches found.</span>';
+                } else {
+                    matches = matchingCodes.join(", ");
+                    output.innerHTML = '<span class="matches">Matching codes: ' + matches + '</span>';
+                }
+            } else if (length === 3) {
+                // Show the definition for the exact 3-letter code
+                for (const qCode of qCodes) {
+                    if (qCode.code === userInput) {
+                        myMatch = qCode.statement;
+                        break;
+                    }
+                }
+                
+                if (myMatch === "") {
+                    output.innerHTML = '<span class="error">Sorry, no match found.</span>';
+                } else {
+                    output.innerHTML = '<div class="definition"><strong>' + userInput + ':</strong><br>' + myMatch + '</div>';
+                }
+            }
+        }
+
+        function resetToInstructions() {
+            output.innerHTML = instruction.replace(/\n/g, '<br>');
+        }
+
+        // Handle keyboard events
+        document.addEventListener('keydown', function(e) {
+            // Prevent default behavior for keys we handle
+            if (e.key === 'Backspace' || e.key === 'Escape' || /^[a-zA-Z]$/.test(e.key)) {
+                e.preventDefault();
+            }
+
+            if (e.key === 'Backspace' && userInput.length > 1) {
+                userInput = userInput.slice(0, -1);
+                qInput.value = userInput;
+                
+                if (userInput.length === 1) {
+                    resetToInstructions();
+                } else {
+                    updateOutput();
+                }
+            } else if (e.key === 'Escape') {
+                userInput = "Q";
+                qInput.value = userInput;
+                resetToInstructions();
+            } else if (userInput.length < 3 && /^[a-zA-Z]$/.test(e.key)) {
+                userInput += e.key.toUpperCase();
+                qInput.value = userInput;
+                updateOutput();
+            }
+        });
+
+        // Focus the input when the page loads
+        window.addEventListener('load', function() {
+            qInput.focus();
+            resetToInstructions();
+        });
+
+        // Keep focus on the input
+        qInput.addEventListener('blur', function() {
+            setTimeout(() => qInput.focus(), 10);
+        });
+
+        // Prevent typing directly in the input field
+        qInput.addEventListener('input', function(e) {
+            e.target.value = userInput;
+        });
+
+        // Handle clicks to maintain focus
+        document.addEventListener('click', function() {
+            qInput.focus();
+        });
+    </script>
+</body>
+</html>
